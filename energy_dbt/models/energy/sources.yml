@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: dk_energy
+    schema: dk_energy
+    tables:
+      - name: capacity_per_municipality
+        description: Raw capacity data per municipality from Energidataservice
+      
+      - name: municipality_region_mapping
+        description: Reference table mapping municipality codes to names and regions

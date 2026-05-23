@@ -1,0 +1,4 @@
+Usage: dagster job execute [OPTIONS]
+Try 'dagster job execute -h' for help.
+
+Error: No such option: --log-level

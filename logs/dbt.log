@@ -1,0 +1,31 @@
+[0m20:34:38.800646 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77558e5060f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x775590b800e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77558e507260>]}
+
+
+============================== 20:34:38.806143 | a3859f94-fa3f-446a-9c6e-ae7f60e6aef0 ==============================
+[0m20:34:38.806143 [info ] [MainThread]: Running with dbt=1.11.8
+[0m20:34:38.806795 [debug] [MainThread]: running dbt with arguments {'invocation_command': 'dbt init energy_dbt', 'warn_error': 'None', 'send_anonymous_usage_stats': 'True', 'cache_selected_only': 'False', 'no_print': 'None', 'log_cache_events': 'False', 'use_experimental_parser': 'False', 'profiles_dir': '/home/ahmed/.dbt', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'quiet': 'False', 'write_json': 'True', 'use_colors': 'True', 'version_check': 'True', 'indirect_selection': 'eager', 'log_format': 'default', 'introspect': 'True', 'static_parser': 'True', 'log_path': 'logs', 'debug': 'False', 'printer_width': '80', 'partial_parse': 'True', 'fail_fast': 'False', 'empty': 'None'}
+[0m20:34:38.827170 [info ] [MainThread]: Creating dbt configuration folder at /home/ahmed/.dbt
+[0m20:34:38.830310 [debug] [MainThread]: Starter project path: /home/ahmed/dk-energy-pipeline/venv/lib/python3.12/site-packages/dbt/include/starter_project
+[0m20:34:38.840596 [info ] [MainThread]: 
+Your new dbt project "energy_dbt" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m20:34:38.841043 [info ] [MainThread]: Setting up your profile.
+[0m20:36:32.290435 [info ] [MainThread]: Profile energy_dbt written to /home/ahmed/.dbt/profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m20:36:32.292570 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 113.565926, "process_in_blocks": "254944", "process_kernel_time": 0.621397, "process_mem_max_rss": "213064", "process_out_blocks": "80", "process_user_time": 3.248571}
+[0m20:36:32.293952 [debug] [MainThread]: Command `dbt init` succeeded at 20:36:32.293676 after 113.57 seconds
+[0m20:36:32.294725 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x775566a738f0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x77556d169310>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7755670bd2b0>]}
+[0m20:36:32.295609 [debug] [MainThread]: Flushing usage events
+[0m20:36:32.993172 [debug] [MainThread]: An error was encountered while trying to flush usage events
