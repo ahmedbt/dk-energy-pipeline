@@ -6,37 +6,28 @@
 Denmark aims for 100% renewable electricity by 2030. But which municipalities are actually transitioning vs. still relying on thermal? This pipeline answers that question by tracking monthly wind, solar, and thermal capacity data.
 
 ## Architecture
-
-
-┌─────────────────────────────────┐
-│     Energi Data Service API     │
-│        HTTP source API          │
-└───────────────┬─────────────────┘
-                │ HTTP requests
-                ▼
-┌─────────────────────────────────┐
-│           Dagster               │
-│   Scheduled: 5th of each month  │
-└───────────────┬─────────────────┘
-                │ DataFrame
-                ▼
-┌─────────────────────────────────┐
-│            BigQuery             │
-│  Raw + transformed · $0 sandbox │
-└───────────────┬─────────────────┘
-                │ dbt run
-                ▼
-┌─────────────────────────────────┐
-│           dbt Models            │
-│  Enrichment + metrics · SQL     │
-└─────────┬───────────────┬───────┘
-          │               │
-          ▼               ▼
-┌──────────────┐  ┌──────────────┐
-│    Slack     │  │   Power BI   │
-│    Alerts    │  │  Dashboard   │
-└──────────────┘  └──────────────┘
-
+```mermaid
+graph TB
+    API[Energi Data Service API<br/>HTTP Source]
+    DAGSTER[Dagster<br/>Scheduled: 5th of each month]
+    BQ[BigQuery<br/>Raw + Transformed · $0 Sandbox]
+    DBT[dbt Models<br/>Enrichment + Metrics · SQL]
+    SLACK[Slack Alerts]
+    PBI[Power BI Dashboard]
+    
+    API -->|HTTP requests| DAGSTER
+    DAGSTER -->|DataFrame| BQ
+    BQ -->|dbt run| DBT
+    DBT -->|Success/Failure| SLACK
+    DBT -->|Query| PBI
+    
+    style API fill:#e1f5fe
+    style DAGSTER fill:#fff3e0
+    style BQ fill:#e8f5e9
+    style DBT fill:#fce4ec
+    style SLACK fill:#f3e5f5
+    style PBI fill:#fff9c4
+```
 
 ## Tech Stack & Trade-offs
 
@@ -44,28 +35,26 @@ Denmark aims for 100% renewable electricity by 2030. But which municipalities ar
 |-----------|--------|-------------|
 | Orchestration | Dagster | Asset lineage > Airflow DAGs; Python-native |
 | Warehouse | BigQuery Sandbox | $0, serverless, industry standard |
-| Transformations | dbt-core | SQL-only, version-controlled testing |
-| Quality | Great Expectations | Pre-load validation; regex on strings |
+| Transformations and Quality | dbt-core | SQL-only, version-controlled testing |
 | Monitoring | Slack webhook | Simple, no paid tier needed |
 | Dashboard | Power BI | Enterprise BI; free desktop version |
 
 ## Key Features
 
-### ✅ Incremental Loading
+###  Incremental Loading
 - Pipeline tracks `last_run_date` in BigQuery metadata table
 - Only fetches new records each month (WRITE_APPEND)
 - Reduced API calls from 60+ to 1 per month
 
-### ✅ Data Quality Gates
+###  Data Quality Gates
 - **dbt tests**: Not-null, unique on MunicipalityNo, Month
-- **Great Expectations**: 7+ validations including date format regex, capacity ranges, row count
 
-### ✅ Production Monitoring
+###  Production Monitoring
 - Slack alerts on success/failure
 - Pipeline fails fast if quality checks fail
 - Dagster UI for lineage + logs
 
-### ✅ Enrichment
+###  Enrichment
 - Joined municipality names (English/Danish) and 5 regions
 - Calculated `renewable_percentage = (Wind + Solar) / Total * 100`
 
@@ -73,7 +62,7 @@ Denmark aims for 100% renewable electricity by 2030. But which municipalities ar
 
 ```bash
 # Clone & setup
-git clone https://github.com/YOUR_USERNAME/dk-energy-pipeline
+git clone https://github.com/ahmedbt/dk-energy-pipeline
 cd dk-energy-pipeline
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
@@ -88,11 +77,8 @@ python run_simple.py
 # Run dbt tests
 cd energy_dbt && dbt test
 
-# Validate with Great Expectations
-python ge_suite_energy.py
-
-# Launch Power BI dashboard (open dashboard.pbix)
-
+# Launch Power BI dashboard (open dk_energy_dashboard.pbix)
+```
 ## Sample Output
 
 **Slack Alert (Success):**
@@ -101,7 +87,7 @@ python ge_suite_energy.py
 
 **Power BI Dashboard Shows:**
 
-- National renewable percentage trend (2019–2024)
+- National renewable sources trend (2019–2026)
 - Regional leaderboard (Region Syddanmark: 68% renewable)
 - Municipality drill-down: Samsø at 100% renewable
 
@@ -114,6 +100,6 @@ python ge_suite_energy.py
 
 ## Lessons Learned
 
-- **String vs. Date:** Storing `Month` as `STRING` avoided PyArrow errors; moved date validation to GE where regex is easier
+- **String vs. Date:** Storing `Month` as `STRING` avoided PyArrow errors; moved date validation to dbt
 - **Service Account JSON:** Must be minified to a single line for Power BI
 - **Duplicate model definitions:** Models only in `schema.yml`, sources only in `sources.yml`
