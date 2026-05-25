@@ -46,6 +46,9 @@ graph TB
 - Only fetches new records each month (WRITE_APPEND)
 - Reduced API calls from 60+ to 1 per month
 
+![BigQuery Overview](dashboard-images/raw_data.png)
+
+
 ###  Data Quality Gates
 - **dbt tests**: Not-null, unique on MunicipalityNo, Month
 
@@ -54,9 +57,16 @@ graph TB
 - Pipeline fails fast if quality checks fail
 - Dagster UI for lineage + logs
 
+![Slack Overview](dashboard-images/slack.png)
+
+![Dagster Overview](dashboard-images/dagster.png)
+
 ###  Enrichment
 - Joined municipality names (English/Danish) and 5 regions
 - Calculated `renewable_percentage = (Wind + Solar) / Total * 100`
+
+![BigQuery Overview](dashboard-images/transformed_data.png)
+
 
 ## How to Run
 
@@ -90,6 +100,9 @@ cd energy_dbt && dbt test
 - National renewable sources trend (2019–2026)
 - Regional leaderboard (Region Syddanmark: 68% renewable)
 - Municipality drill-down: Samsø at 100% renewable
+
+![Dashboard Overview](dashboard-images/dashboard.png)
+
 
 ## What I'd Improve with More Time
 
